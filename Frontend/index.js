@@ -11,7 +11,9 @@ const studentno = process.env.studno || "student01";
 const bookServiceUrl = process.env.url ||  "http://localhost:3001/"
 
 function getPage(content, title) {
-  return "<html><head><title>Lab " + labno + " - " + studentno + " - " + title + "</title><h1>Reading list for Lab " + labno + " - " + studentno + " <br> " + title + "</h1></head><body>" + content + "</body></html>"
+  let toReturn =  "<html><head><title>Lab " + labno + " - " + studentno + " - " + title + "</title><h1>Reading list for Lab " + labno + " - " + studentno + " <br> " + title + "</h1></head><body>" + content + "</body></html>"
+  console.log(toReturn);
+  return toReturn;
 }
 app.get('/', (req, res) => {
   http.get(bookServiceUrl, res2 => {

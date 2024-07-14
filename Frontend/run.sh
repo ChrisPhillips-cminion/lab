@@ -20,7 +20,7 @@ echo -e "\n[3/3]Deploying the JMeter client"
 oc process -f frontend-dc.yaml \
     -p APP_NAMESPACE=$NAMESPACE \
     -p APPLICATION_NAME=$APP_NAME \
-    -p URL=http://frontend.svc.cluster:3001 \
+    -p URL=http://db1.cp4i.svc.cluster.local:3001 \
     -p LABNO=1193 \
     -p STUDENTNO=$STUDENTNO  | oc apply -f -
 
