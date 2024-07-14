@@ -1,0 +1,96 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: db1
+labels:
+  template: db1
+objects:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${APPLICATION_NAME}
+    namespace: ${APP_NAMESPACE}
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 1
+    selector:
+      app: ${APPLICATION_NAME}
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        name: ${APPLICATION_NAME}
+        labels:
+          app: ${APPLICATION_NAME}
+      spec:
+        containers:
+          -
+            name: ${APPLICATION_NAME}
+            image: ""
+            imagePullPolicy: Always
+            env:
+              - name: RUN_db1
+                value: "true"
+              - name: MEMORY_REQUEST
+                valueFrom:
+                  resourceFieldRef:
+                    containerName: ${APPLICATION_NAME}
+                    resource: requests.memory
+              - name: MEMORY_LIMIT
+                valueFrom:
+                  resourceFieldRef:
+                    containerName: ${APPLICATION_NAME}
+                    resource: limits.memory
+            # ports:
+            #   - name: http
+            #     containerPort: 8080
+            #     protocol: TCP
+            resources:
+              limits:
+                # cpu: ${CPU_LIMIT}
+                memory: ${MEMORY_LIMIT}Mi
+              requests:
+                cpu: ${CPU_REQUEST}
+                memory: ${MEMORY_REQUEST}Mi
+    triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APPLICATION_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${APPLICATION_NAME}:v1
+parameters:
+  - name: APPLICATION_NAME
+    description: "The name of the Image stream (input)."
+    required: false
+    value: "db1"
+  - name: APP_NAMESPACE
+    description: "The namespace of the application."
+    required: true
+  - description: Sets the initial memory request in Mi for the application.
+    displayName: Memory Request
+    name: MEMORY_REQUEST
+    value: "512"
+  - description: Sets the memory limit in Mi, available to the application.
+    displayName: Memory Limit
+    name: MEMORY_LIMIT
+    value: "2048"
+  - description: Sets the initial CPU request for the application.
+    displayName: CPU Request
+    name: CPU_REQUEST
+    value: "0.5"
+  - description: Sets the CPU limit, available to the application.
+    displayName: CPU Limit
+    name: CPU_LIMIT
+    value: "2.0"

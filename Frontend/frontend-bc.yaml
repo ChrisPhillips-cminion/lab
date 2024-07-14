@@ -1,9 +1,9 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: db1
+  name: frontend
 labels:
-  template: db1
+  template: frontend
 objects:
   - apiVersion: image.openshift.io/v1
     kind: ImageStream
@@ -52,7 +52,7 @@ parameters:
   - name: APPLICATION_NAME
     description: "The name of the Image stream (output)."
     required: false
-    value: "db1"
+    value: "frontend"
   - name: APP_NAMESPACE
     description: "The namespace where the BuildConfig will be executed."
     required: true

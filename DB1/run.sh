@@ -8,20 +8,22 @@ CPU_REQUEST="3.0"
 CPU_LIMIT="4.0"
 
 echo -e "\n[2/3]Building the JMeter container image"
-oc process -f db1-bc.yaml \
-    -p APP_NAMESPACE=$NAMESPACE \
-    -p APPLICATION_NAME=$APP_NAME \
-    -p GIT_CONTEXT_DIR=$GIT_CONTEXT_DIR \
-    -p GIT_REPOSITORY=$GIT_REPO | oc apply -f -
+# oc process -f db1-bc.yaml \
+#     -p APP_NAMESPACE=$NAMESPACE \
+#     -p APPLICATION_NAME=$APP_NAME \
+#     -p GIT_CONTEXT_DIR=$GIT_CONTEXT_DIR \
+#     -p GIT_REPOSITORY=$GIT_REPO | oc apply -f -
+#
 
-exit
 
 # # Deploy the RHDG client
 echo -e "\n[3/3]Deploying the JMeter client"
-oc process -f templates/jmeter-dc.yaml \
+oc process -f db1-dc.yaml \
     -p APP_NAMESPACE=$NAMESPACE \
     -p APPLICATION_NAME=$APP_NAME \
     -p MEMORY_REQUEST=$MEMORY_REQUEST \
     -p MEMORY_LIMIT=$MEMORY_LIMIT \
     -p CPU_REQUEST=$CPU_REQUEST \
     -p CPU_LIMIT=$CPU_LIMIT | oc apply -f -
+
+oc expose dc/db1 --port 3001
