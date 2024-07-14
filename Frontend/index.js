@@ -11,7 +11,7 @@ const studentno = process.env.studno || "student01";
 const bookServiceUrl = process.env.url ||  "http://localhost:3001/"
 
 function getPage(content, title) {
-  let toReturn =  "<html><head><title>Lab " + labno + " - " + studentno + " - " + title + "</title><h1>Reading list for Lab " + labno + " - " + studentno + " <br> " + title + "</h1></head><body>" + content + "</body></html>"
+  let toReturn =  "<html><head> <script type=\"module\" src=\"https://1.www.s81c.com/common/carbon/web-components/version/v2.10.0/data-table.min.js\"></script><title>Lab " + labno + " - " + studentno + " - " + title + "</title><h1>Reading list for Lab " + labno + " - " + studentno + " <br> " + title + "</h1></head><body>" + content + "</body></html>"
   console.log(toReturn);
   return toReturn;
 }
@@ -29,12 +29,12 @@ app.get('/', (req, res) => {
     res2.on('end', () => {
       console.log('Response ended: ');
       const users = JSON.parse(Buffer.concat(data).toString());
-      let t = "<table>"
+      let t = "<cds-table><cds-table-body>"
       users.forEach((e) => {
-        t = t + "<tr><td rowspan=2>IMAGE</td><td colspan=2><p class=title>" + e.title + "</p></td></tr>"
-        t = t + "<tr><td><p class=author>" + e.author + "</p></td><td><a href=/d/" + e.id + ">more details</a></td></tr>"
+        t = t + "<cds-table-row><cds-table-cell rowspan=2>IMAGE</cds-table-cell><cds-table-cell colspan=2><p class=title>" + e.title + "</p></cds-table-cell></cds-table-row>"
+        t = t + "<cds-table-row><cds-table-cell><p class=author>" + e.author + "</p></cds-table-cell><cds-table-cell><a href=/d/" + e.id + ">more details</a></cds-table-cell></cds-table-row>"
       })
-      t = t + "</table>"
+      t = t + "</cds-table-body></cds-table>"
       res.send(getPage(JSON.stringify(t), "main"));
     });
   }).on('error', err => {
@@ -58,12 +58,12 @@ app.get('/d/:id', (req, res) => {
           console.log('Response ended: ');
           console.log(Buffer.concat(data).toString())
           const book = JSON.parse(Buffer.concat(data).toString());
-          let t = "<a href=/>back</a><table>"
-            t = t + "<tr><td rowspan=3>IMAGE</td><td colspan=2><p class=title>" + book.title + "</p></td></tr>"
-            t = t + "<tr><td><p class=author> by " + book.author + "</p></td><td>isbn "+book.isbn+"</td></tr>"
-            t = t + "<tr><td colspan=2><p class=decription>"+book.description+"</p></td></tr>"
+          let t = "<a href=/>back</a><cds-table>"
+            t = t + "<cds-table-row><cds-table-cell rowspan=3>IMAGE</cds-table-cell><cds-table-cell colspan=2><p class=title>" + book.title + "</p></cds-table-cell></cds-table-row>"
+            t = t + "<cds-table-row><cds-table-cell><p class=author> by " + book.author + "</p></cds-table-cell><cds-table-cell>isbn "+book.isbn+"</cds-table-cell></cds-table-row>"
+            t = t + "<cds-table-row><cds-table-cell colspan=2><p class=decription>"+book.description+"</p></cds-table-cell></cds-table-row>"
 
-          t = t + "</table>"
+          t = t + "</cds-table>"
 
           res.send(getPage(t, book.title));
         });
