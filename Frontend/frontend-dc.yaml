@@ -68,8 +68,8 @@ parameters:
   - description: LABNO
     displayName: LABNO
     name: LABNO
-    value: 1192
+    value: "1192"
   - description: Student Number
     displayName: Student Number
     name: STUDENTNO
-    value: 1
+    value: "1"
