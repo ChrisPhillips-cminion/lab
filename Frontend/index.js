@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 
 })
 app.get('/d/:id', (req, res) => {
-      http.get(bookServiceUrl+req.params.id+'/details', res2 => {
+      http.get(bookServiceUrl+'/'+req.params.id+'/details', res2 => {
         let data = [];
         const headerDate = res2.headers && res2.headers.date ? res2.headers.date : 'no response date';
         console.log('Status Code:', res.statusCode);
